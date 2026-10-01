@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro'; import ArticleList from '../components/ArticleList.astro'; import { articles, dateOf } from '../lib/content';
+const all = await articles(); const years = [...new Set(all.map(a => dateOf(a).slice(0,4)))];
+---
+<Base title="全部归档" description="全部研究、短观点与实践，按最近更新时间归档。">
+<header class="page-heading">
+<p class="eyebrow">时间归档</p>
+<h1>全部内容</h1>
+<p>按最近更新时间排列，保留持续修订的轨迹。</p>
+</header>
+<div class="page-content">{years.map(y => <section>
+<h2 class="archive-year">{y}</h2>
+<ArticleList items={all.filter(a => dateOf(a).startsWith(y))}/>
+</section>)}{!years.length && <p>尚无公开内容。</p>}</div>
+</Base>

@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../../site.config.mjs';
+---
+<Base title="关于我" description="工作背景、长期研究方向，以及个人研究与公司官方信息的边界。">
+<header class="page-heading">
+<p class="eyebrow">个人简介</p>
+<h1>关于我</h1>
+<p>在 AI、企业经营与资本之间，积累能够持续使用的认知。</p>
+</header>
+<div class="prose about">
+<h2>工作与研究</h2>
+<p>我的工作背景位于 AI、企业经营、投资与资本的交叉领域。我关心技术如何进入真实的组织，如何形成可交付、可持续的产品与业务，以及这些变化对企业经营和资本配置意味着什么。</p>{site.author ? <p>姓名：{site.author}</p> : <p class="notice">公开姓名与详细履历尚待本人补充。本页不包含未经确认的经历、职位或客户案例。</p>}
+<h2>这个网站记录什么</h2>
+<p>
+<a href="/notes/">短观点</a> 保存简短判断和开放问题；<a href="/research/">研究文章</a> 展开系统研究；<a href="/practice/">实践复盘</a> 记录方法与复盘。<a href="/topics/">长期主题</a> 把不同阶段的内容连接成长期问题。</p>
+<p>文章可以持续修订。首次发布日期和最近更新日期分别保留，标题变化不会主动改变原有链接。</p>
+<h2>个人观点与公司信息</h2>
+<p>本站是个人知识库。文中判断、分析与推测均为个人观点，不构成所在公司或合作机构的官方表态。涉及公司工作的文章会单独标注；公司产品、公告和正式材料应以原始官方来源为准。</p>{site.company && <p>当前工作：<a href={site.company.url}>{site.company.name}</a>{site.company.role && ` · ${site.company.role}`}。该链接指向公司官方信息。</p>}
+<h2>引用与使用</h2>
+<p>欢迎通过原文永久链接引用。请注明文章标题、作者（如已署名）、更新日期与访问日期。未经许可，不应将本站个人研究改写成公司官方声明。</p>
+<h2 id="contact">联系</h2>{site.email ? <p>
+<a href={`mailto:${site.email}`}>{site.email}</a>
+</p> : <p>联系邮箱将在本人确认后公开。你也可以通过 <a href="/rss.xml">RSS</a> 订阅内容更新。</p>}
+</div>
+</Base>

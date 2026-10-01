@@ -1,0 +1,31 @@
+{
+  "name": "personal-knowledge",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1",
+    "preview": "astro preview --host 127.0.0.1",
+    "prebuild": "node scripts/check-content.mjs",
+    "build": "astro build",
+    "postbuild": "node scripts/check-output.mjs",
+    "check": "astro check",
+    "verify": "npm run test && npm run check && npm run build",
+    "new:note": "node scripts/new.mjs note",
+    "new:research": "node scripts/new.mjs research",
+    "new:practice": "node scripts/new.mjs practice",
+    "test": "node --test scripts/check-content.test.mjs"
+  },
+  "dependencies": {
+    "astro": "7.3.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "typescript": "^5.9.3",
+    "yaml": "^2.8.1",
+    "parse5": "^7.3.0"
+  }
+}

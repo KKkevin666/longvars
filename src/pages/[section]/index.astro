@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import { articles, sections } from '../../lib/content';
+export function getStaticPaths() { return Object.entries(sections).map(([section, info]) => ({ params:{section}, props:{info} })); }
+const { info } = Astro.props; const items = (await articles()).filter(a => a.data.type === info.type);
+---
+<Base title={info.title} description={info.description}>
+<header class="page-heading">
+<p class="eyebrow">{info.label} / {items.length} 篇</p>
+<h1>{info.title}</h1>
+<p>{info.description}</p>
+</header>
+<section class="page-content" aria-label={info.title}>
+<h2 class="sr-only">全部{info.label}</h2>
+<ArticleList items={items}/>
+</section>
+</Base>

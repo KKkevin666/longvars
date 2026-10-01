@@ -1,0 +1,27 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import { topics, articles, dateOf, sections } from '../../lib/content';
+export async function getStaticPaths() { return (await topics()).map(t => ({params:{slug:t.data.slug}, props:{t}})); }
+const {t} = Astro.props; const { Content } = await render(t); const entries = (await articles()).filter(a => a.data.topics.includes(t.data.slug));
+---
+<Base title={t.data.title} description={t.data.description}>
+<header class="page-heading">
+<p class="eyebrow">
+<a href="/topics/">主题索引</a> / 长期主题</p>
+<h1>{t.data.title}</h1>
+<p>{t.data.description}</p>
+<p class="entry-meta">{entries.length} 篇内容{entries[0] && <span>最近更新 · <time datetime={dateOf(entries[0])}>{dateOf(entries[0])}</time>
+</span>}</p>
+</header>
+<div class="prose">
+<Content/>
+</div>
+<div class="page-content">{Object.values(sections).map(s => <section class="section">
+<div class="section-heading">
+<h2>{s.title}</h2>
+</div>
+<ArticleList items={entries.filter(a => a.data.type === s.type)}/>
+</section>)}</div>
+</Base>

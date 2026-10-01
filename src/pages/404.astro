@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+import { absolute } from '../../site.config.mjs';
+---
+<Base canonical={absolute('/404.html')} title="页面未找到" description="此链接不存在，请从主题索引或内容归档继续浏览。" noindex>
+<header class="page-heading">
+<p class="eyebrow">404</p>
+<h1>这个页面暂时找不到。</h1>
+<p>可以从 <a href="/topics/">主题索引</a> 或 <a href="/archive/">全部归档</a> 继续阅读。</p>
+</header>
+</Base>

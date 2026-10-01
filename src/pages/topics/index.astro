@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import { topics, articles, dateOf } from '../../lib/content';
+const ts = await topics(); const all = await articles();
+---
+<Base title="长期主题" description="围绕 AI、企业经营与资本的长期问题索引，汇集研究、短观点与实践。">
+<header class="page-heading">
+<p class="eyebrow">主题索引</p>
+<h1>长期研究的问题</h1>
+<p>以问题组织知识。每个主题汇集相关研究、工作观察与实践记录。</p>
+</header>
+<div class="topic-grid page-content">{ts.map((t,i) => { const entries = all.filter(a => a.data.topics.includes(t.data.slug)); return <a class="topic-item" href={`/topics/${t.data.slug}/`}>
+<span class="topic-index">{String(i+1).padStart(2,'0')}</span>
+<div>
+<h2>{t.data.title}</h2>
+<p>{t.data.description}</p>
+<p>{entries.length} 篇{entries[0] && ` · 最近更新 ${dateOf(entries[0])}`}</p>
+</div>
+</a> })}</div>
+</Base>

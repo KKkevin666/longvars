@@ -1,0 +1,51 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import { articles, topics, related, urlOf, labelOf, dateOf } from '../../lib/content';
+import { site, absolute } from '../../../site.config.mjs';
+export async function getStaticPaths() { return (await articles()).map(a => ({ params:{section:a.data.type === 'note' ? 'notes' : a.data.type, slug:a.data.slug}, props:{a} })); }
+const { a } = Astro.props; const { Content, headings } = await render(a);
+const ts = (await topics()).filter(t => a.data.topics.includes(t.data.slug)); const links = await related(a);
+const canonical = a.data.canonical || absolute(urlOf(a));
+const structured = { '@context':'https://schema.org', '@type':'Article', headline:a.data.title, description:a.data.description, datePublished:`${a.data.date}T00:00:00+08:00`, dateModified:`${dateOf(a)}T00:00:00+08:00`, mainEntityOfPage:canonical, url:canonical, inLanguage:'zh-CN', keywords:a.data.tags, about:ts.map(t => ({'@type':'Thing', name:t.data.title, url:absolute(`/topics/${t.data.slug}/`)})), ...(site.author ? {author:{'@type':'Person', '@id':absolute('/about/#person'), name:site.author}} : {}) };
+const toc = headings.filter(h => h.depth === 2 || h.depth === 3);
+---
+<Base title={a.data.title} description={a.data.description} canonical={canonical} article published={a.data.date} updated={dateOf(a)} structured={structured} noindex={a.data.example}>
+<article>
+<header class="article-header">
+<p class="eyebrow">
+<a href={`/${a.data.type === 'note' ? 'notes' : a.data.type}/`}>{labelOf(a)}</a> / {a.data.example ? '示例内容' : '个人研究'}</p>
+<h1>{a.data.title}</h1>
+<p class="article-description">{a.data.description}</p>
+<div class="article-dates">
+<span>首次发布 · <time datetime={a.data.date}>{a.data.date}</time>
+</span>
+<span>最近更新 · <time datetime={dateOf(a)}>{dateOf(a)}</time>
+</span>
+</div>
+<div class="topic-links">{ts.map(t => <a href={`/topics/${t.data.slug}/`}>{t.data.title}</a>)}</div>
+{a.data.example && <p class="notice">示例内容：仅用于验证页面、链接与聚合逻辑，不代表作者已经完成的研究或真实项目经历。</p>}{a.data.company_related && <p class="notice">涉及公司相关实践。本文仅代表个人观点；产品和官方信息以文中链接的公司原始资料为准。</p>}</header>
+<div class="article-layout">
+<div class="prose">
+<Content/>
+</div>{toc.length >= 3 && <aside class="toc" aria-label="文章目录">
+<details open>
+<summary>本文目录</summary>
+<ol>{toc.map(h => <li class={`depth-${h.depth}`}>
+<a href={`#${h.slug}`}>{h.text}</a>
+</li>)}</ol>
+</details>
+</aside>}</div>
+<footer class="article-bottom">
+<h2>继续研究这个问题</h2>
+<div class="topic-links">{ts.map(t => <a href={`/topics/${t.data.slug}/`}>{t.data.title}</a>)}</div>
+<p class="permalink">原文永久链接 · <a href={canonical}>{canonical}</a>
+<br/>引用时请注明标题、作者与最近更新日期。</p>
+<h2>相关文章</h2>
+<div style="margin-top:22px">
+<ArticleList items={links} compact/>
+</div>
+</footer>
+</article>
+</Base>

@@ -1,0 +1,12 @@
+---
+import { dateOf, urlOf, labelOf, type Article } from '../lib/content';
+interface Props { items: Article[]; compact?: boolean; }
+const { items, compact = false } = Astro.props;
+---
+{items.length ? <ol class:list={['article-list',{ compact }]}>{items.map(a => <li>
+<div class="entry-meta">
+<span>{labelOf(a)}</span>
+<time datetime={dateOf(a)}>{dateOf(a)}</time>{a.data.example && <span class="example-tag">示例</span>}</div>
+<h3>
+<a href={urlOf(a)}>{a.data.title}</a>
+</h3>{!compact && <p>{a.data.description}</p>}</li>)}</ol> : <p class="empty">这个问题仍在研究中，后续内容将在这里汇集。</p>}
