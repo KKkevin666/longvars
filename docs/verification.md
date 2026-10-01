@@ -49,3 +49,20 @@
 - 保留文章中的必要专业术语及英文稳定 URL；slug、type、发布日期不变。
 - `npm run verify` 通过：6 项测试、类型检查、18 页构建及链接/metadata 检查。
 - 部署状态不变，尚未连接 Cloudflare 与正式域名。
+
+## 2026-10-01 上线（临时域名）
+
+- 代码推送到新建的公开仓库 https://github.com/KKkevin666/longvars（main 分支，41 个文件，一次提交）。
+- Cloudflare Pages 项目 `longvars` 已连接该仓库并部署成功：
+  - 构建命令 `npm run build`，输出目录 `dist`，NODE_VERSION=22。
+  - 环境变量：SITE_URL=https://www.qingheai.top；未设置 SITE_MODE，站点保持 noindex 预览状态（含"预览版本"提示条）。
+  - pages.dev 地址 https://longvars.pages.dev，HTTP 200 已验证。
+- 临时域名 www.qingheai.top 已在 Pages → Custom domains 绑定并激活，SSL 正常；HTTP 200、标题"长期主义"已验证。
+- 阿里云 DNS 为 qingheai.top 新增 www CNAME → longvars.pages.dev（TTL 10 分钟）；其余原有记录未动，未转 Nameserver，未碰 apex。
+- 未备案：站点托管在境外（Cloudflare），无需备案。注意微信生态会拦截未备案域名，对外传播暂用 pages.dev 地址或等正式域名。
+
+## 尚待办（外部步骤）
+
+- package-lock.json 未能推送到仓库（182KB，超出推送工具单参数 128KB 上限）；Cloudflare 构建时 `npm install` 会重新生成，不影响部署。以后可在本地补上：clone 仓库后把 package-lock.json 复制进去提交推送。
+- longvars.com 在 Cloudflare 的注册若完成：在 Pages → Custom domains 添加该域名，把 SITE_URL 环境变量改为 https://longvars.com 后重新部署；并把 site.config.mjs 里的 url 占位符 https://example.com 换成正式域名。
+- 正式发布前：site.config.mjs 补 author/email；删除示例内容或设为 draft；设置 SITE_MODE=production（解除 noindex）。
